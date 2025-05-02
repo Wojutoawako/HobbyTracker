@@ -2,14 +2,13 @@
 using Xamarin.Forms;
 using Xamarin.Plugin.Calendar.Controls;
 using System.Collections.Generic;
+using System;
 
 namespace MobileAppProject
 {
     public class SchedulePage : ContentPage
     {
-        public RangeSelectionCalendar Calendar;
-        public TimePicker TimePicker;
-        public Picker HobbyPicker;
+        public Xamarin.Plugin.Calendar.Controls.Calendar Calendar;
 
         public SchedulePage()
         {
@@ -17,66 +16,92 @@ namespace MobileAppProject
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.StartAndExpand,
+
+                SelectedDates = new List<System.DateTime>(),
+
                 Culture = new CultureInfo("ru-RU"),
             };
 
-            TimePicker = new TimePicker()
-            {
-                IsVisible = false,
-                IsEnabled = false,
-            };
-
-            HobbyPicker = new Picker();
-
-            foreach (var item in HobbyModel.hobbyNames)
-                HobbyPicker.Items.Add(item);
+            Calendar.PropertyChanged += SelectedDatesChanged;
 
             var layout = new StackLayout();
 
+            var addActivityButton = new Button()
+            {
+                Text = "Add",
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.End,
+                MinimumHeightRequest = 70,
+                MinimumWidthRequest = 100,
+            };
+
+            addActivityButton.Pressed += AddActivity;
+
             layout.Children.Add(Calendar);
-            layout.Children.Add(TimePicker);
-            layout.Children.Add(HobbyPicker);
-
-            TimePicker.PropertyChanged += OnTimePickerPropertyChanged;
-
-            Calendar.DayTappedCommand = new Command(
-                () =>
-                {
-                    ToggleTimePicking(Calendar.SelectedDates.Count > 0);
-                    //EventsInfoWhenDaysSelected(layout);
-                });
+            layout.Children.Add(addActivityButton);
 
             Content = layout;
         }
 
-        private void OnTimePickerPropertyChanged(object sender,
-            System.ComponentModel.PropertyChangedEventArgs e)
+        private void SelectedDatesChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Time")
-                AddNewEvents();
+            var dayCountPositive = Calendar.SelectedDates.Count > 0;
+            if (e.PropertyName == "SelectedDates" && dayCountPositive)
+            {
+                Calendar.EventTemplate = new DataTemplate(() =>
+                {
+                    var templateLayout = new StackLayout();
+
+                    var listView = new ListView()
+                    {
+                        ItemsSource = Calendar.SelectedDayEvents,
+                        SelectionMode = ListViewSelectionMode.None,
+                        IsRefreshing = false,
+                    };
+
+                    listView.ItemTemplate = new DataTemplate(() =>
+                        {
+                            var itemCell = new TextCell();
+
+                            itemCell.SetBinding(TextCell.TextProperty, "HobbyName");
+
+                            return itemCell;
+                        });
+
+                    templateLayout.Children.Add(listView);
+
+                    return templateLayout;
+                });
+            }
+            else if (e.PropertyName == "SelectedDates" && !dayCountPositive)
+                Calendar.EventTemplate = Calendar.EmptyTemplate;
         }
 
-        private void AddNewEvents()
+        private async void AddActivity(object sender, System.EventArgs e)
         {
-            foreach (var day in Calendar.SelectedDates)
+            if (Calendar.SelectedDates.Count > 0)
             {
-                var dateTime = new System.DateTime(day.Year, day.Month, day.Day, TimePicker.Time.Hours, TimePicker.Time.Minutes, 0);
-                Calendar.Events.Add(dateTime, new List<HobbyModel>() { new HobbyModel("Piano", "") });
+                var activityPage = new ActivityPage(Calendar);
+                await Navigation.PushAsync(activityPage);
+            } else
+            {
+                return;
             }
         }
+    }
 
-        private void EventsInfoWhenDaysSelected(StackLayout layout)
-        {
-            foreach (var item in Calendar.SelectedDayEvents)
-            {
-                
-            }
-        }
+    public class ActivityModel
+    {
+        public DateTime ActivityTime { get; private set; }
 
-        private void ToggleTimePicking(bool daysSelected)
+        public HobbyModel Hobby { get; private set; }
+
+        public string HobbyName { get { return Hobby.Name; } }
+
+        public ActivityModel(DateTime activityTime, HobbyModel hobby)
         {
-            TimePicker.IsEnabled = daysSelected;
-            TimePicker.IsVisible = daysSelected;
+            ActivityTime = activityTime;
+            Hobby = hobby;
         }
     }
 }
