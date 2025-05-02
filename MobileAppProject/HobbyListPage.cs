@@ -1,11 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace MobileAppProject
 {
     public class HobbyListPage : ContentPage
     {
-        public HobbyList HobbyList = new HobbyList();
+        public HobbyView HobbyList = new HobbyView();
 
         public HobbyListPage()
         {
@@ -53,7 +52,7 @@ namespace MobileAppProject
         }
     }
 
-    public class HobbyList : StackLayout // возможно, ObservableCollection может лучше
+    public class HobbyView : StackLayout // возможно, ObservableCollection может подойти лучше
     {
         public void AddHobby(HobbyModel hobby)
         {
