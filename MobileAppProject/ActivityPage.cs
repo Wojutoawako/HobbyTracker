@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using System.Collections.Generic;
 using Xamarin.Forms;
-using Xamarin.Plugin.Calendar.Controls;
 using System;
+using System.Collections.ObjectModel;
 
 namespace MobileAppProject
 {
@@ -11,14 +10,15 @@ namespace MobileAppProject
         public TimePicker TimePicker;
         public Picker HobbyPicker;
 
-        public ActivityPage(Calendar calendar)
+        public ActivityPage()
         {
             TimePicker = new TimePicker();
             HobbyPicker = new Picker()
             {
                 Title = "Choose a hobby...",
                 TitleColor = Color.Gray,
-                ItemsSource = HobbyModel.hobbyNames, // только хобби, которые выбраны
+                ItemsSource = HobbyListPage.HobbyList,
+                ItemDisplayBinding = new Binding("Name"),
                 SelectedItem = null,
             };
 
@@ -26,7 +26,9 @@ namespace MobileAppProject
 
             var label = new Label()
             {
-                Text = string.Format("{0} - {1}", calendar.SelectedDates.First(), calendar.SelectedDates.Last()),
+                Text = string.Format("{0} - {1}", 
+                    SchedulePage.Calendar.SelectedDates.First(),
+                    SchedulePage.Calendar.SelectedDates.Last()),
                 FontSize = 20,
                 TextColor = Color.Black,
             };
@@ -38,7 +40,7 @@ namespace MobileAppProject
                 TextColor = Color.Black,
             };
 
-            applyButton.Clicked += (sender, args) => ApplyChangesAndEndTask(calendar);
+            applyButton.Clicked += (sender, args) => ApplyChangesAndEndTask();
 
             layout.Children.Add(label);
             layout.Children.Add(TimePicker);
@@ -48,20 +50,41 @@ namespace MobileAppProject
             Content = layout;
         }
 
-        private async void ApplyChangesAndEndTask(Calendar calendar)
+        private async void ApplyChangesAndEndTask()
         {
-            foreach (var day in calendar.SelectedDates)
+            foreach (var day in SchedulePage.Calendar.SelectedDates)
             {
                 if (HobbyPicker.SelectedItem == null)
                     break;
-                var dateTime = new DateTime(day.Year, day.Month, day.Day, TimePicker.Time.Hours, TimePicker.Time.Minutes, 0);
-                calendar.Events.Add(day, new List<ActivityModel>()
+                var timeKey = new DateTime(day.Year, day.Month, day.Day, TimePicker.Time.Hours, TimePicker.Time.Minutes, 0);
+
+                if (!SchedulePage.Calendar.Events.ContainsKey(timeKey))
                 {
-                    new ActivityModel(dateTime, new HobbyModel((string)HobbyPicker.SelectedItem, null)),
-                });
+                    SchedulePage.Calendar.Events.Add(day, new ObservableCollection<ActivityModel>()
+                        {
+                            new ActivityModel(timeKey, (HobbyModel)HobbyPicker.SelectedItem),
+                        });
+                } else // под вопросом
+                {
+                    var item = SchedulePage.Calendar.Events[timeKey] as ObservableCollection<ActivityModel>;
+                    item.Add(new ActivityModel(timeKey, (HobbyModel)HobbyPicker.SelectedItem));
+                }
             }
 
             await Navigation.PopAsync();
+        }
+    }
+
+    public class ActivityModel
+    {
+        public DateTime ActivityTime { get; private set; }
+
+        public HobbyModel Hobby { get; private set; }
+
+        public ActivityModel(DateTime activityTime, HobbyModel hobby)
+        {
+            ActivityTime = activityTime;
+            Hobby = hobby;
         }
     }
 }
