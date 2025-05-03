@@ -1,10 +1,12 @@
-﻿using Xamarin.Forms;
+﻿using System.Collections.ObjectModel;
+using Xamarin.Forms;
 
 namespace MobileAppProject
 {
     public class HobbyListPage : ContentPage
     {
-        public HobbyView HobbyList = new HobbyView();
+        public static ObservableCollection<HobbyModel> HobbyList 
+            = new ObservableCollection<HobbyModel>();
 
         public HobbyListPage()
         {
@@ -17,6 +19,42 @@ namespace MobileAppProject
                 Padding = new Thickness(5, 5),
             };
 
+            var listView = new ListView()
+            {
+                ItemsSource = HobbyList,
+                RowHeight = 150,
+            };
+
+            listView.ItemTemplate = new DataTemplate(() =>
+            {
+                var itemLayout = new StackLayout();
+
+                var nameLabel = new Label();
+                nameLabel.SetBinding(Label.TextProperty, "Name");
+
+                var infoButton = new Button()
+                {
+                    Text = "More info",
+                };
+
+                var deleteButton = new Button()
+                {
+                    Text = "Delete",
+                };
+
+                deleteButton.Clicked += 
+                    (sender, args) => OnDeleteButtonPressed(listView);
+
+                itemLayout.Children.Add(nameLabel);
+                itemLayout.Children.Add(infoButton);
+                itemLayout.Children.Add(deleteButton);
+
+                return new ViewCell()
+                {
+                    View = itemLayout,
+                };
+            });
+
             Button addHobbyButton = new Button()
             {
                 Text = "Add new hobby",
@@ -25,82 +63,45 @@ namespace MobileAppProject
             };
 
             layout.Children.Add(addHobbyButton);
-            layout.Children.Add(HobbyList);
+            layout.Children.Add(listView);
 
             addHobbyButton.Pressed +=
-                (sender, eventArgs) => OnAddHobbyButtonPressed();
+                (sender, eventArgs) => AddNewHobby();
 
             Content = layout;
         }
 
-        protected async void OnAddHobbyButtonPressed()
+        private async void OnDeleteButtonPressed(View view)
+        {
+            var res = await DisplayAlert("Are you shure?",
+                "Are you shure you want to remove that hobby?", "Yes", "No");
+            if (res)
+            {
+                var listView = view as ListView;
+                var item = listView.SelectedItem as HobbyModel;
+
+                HobbyList.Remove(item);
+            }
+        }
+
+        protected async void AddNewHobby()
         {
             var cancel = "Later";
             var result = await DisplayActionSheet(
                 "Choose the hobby you like", cancel, null, HobbyModel.hobbyNames);
-            AddHobbyToLayout(!result.Equals(cancel) ? result : null);
-            UpdateChildrenLayout();
-        }
 
-        private void AddHobbyToLayout(string name)
-        {
-            if (name != null)
-            {
-                var hobby = new HobbyModel(name, null);
-                HobbyList.AddHobby(hobby);
-            }
+            if (!result.Equals(cancel))
+                HobbyList.Add(new HobbyModel(result, null));
         }
     }
 
-    public class HobbyView : StackLayout // возможно, ObservableCollection может подойти лучше
-    {
-        public void AddHobby(HobbyModel hobby)
-        {
-            var stackLayout = new StackLayout();
-            var deleteButton = new Button()
-            {
-                Text = "Delete",
-            };
-            var infoButton = new Button()
-            {
-                Text = "Info",
-            };
-
-            stackLayout.Children.Add(new Label()
-            {
-                Text = hobby.Name,
-            });
-            infoButton.Pressed += (sender, args) =>
-            {
-                infoButton.Text = hobby.Name;
-            };
-            deleteButton.Pressed += (sender, args) =>
-            {
-                OnDeleteButtonPressed(stackLayout);
-            };
-            stackLayout.Children.Add(infoButton);
-            stackLayout.Children.Add(deleteButton);
-            this.Children.Add(stackLayout);
-        }
-
-        public async void OnDeleteButtonPressed(StackLayout layout)
-        {
-            var page = this.Parent.Parent as ContentPage;
-            var res = await page.DisplayAlert("Are you shure?", "Are you shure you want to remove that hobby?", "Yes", "No");
-            if (res)
-                RemoveHobby(layout);
-        }
-
-        public void RemoveHobby(StackLayout layout)
-        {
-            this.Children.Remove(layout);
-        }
-    }
-
+    /// <summary>
+    /// Класс модели хобби. Содержит отображаемые название, описание, а также краткую сводку статистики активности.
+    /// </summary>
     public class HobbyModel
     {
-        public readonly string Name;
-        public readonly string Description;
+        public string Name { get; }
+        public string Description { get; private set; }
 
         public static readonly string[] hobbyNames =
         {
