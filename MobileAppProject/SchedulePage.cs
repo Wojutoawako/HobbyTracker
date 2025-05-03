@@ -2,13 +2,12 @@
 using Xamarin.Forms;
 using Xamarin.Plugin.Calendar.Controls;
 using System.Collections.Generic;
-using System;
 
 namespace MobileAppProject
 {
     public class SchedulePage : ContentPage
     {
-        public Xamarin.Plugin.Calendar.Controls.Calendar Calendar;
+        public static Xamarin.Plugin.Calendar.Controls.Calendar Calendar;
 
         public SchedulePage()
         {
@@ -50,27 +49,37 @@ namespace MobileAppProject
             {
                 Calendar.EventTemplate = new DataTemplate(() =>
                 {
-                    var templateLayout = new StackLayout();
-
                     var listView = new ListView()
                     {
                         ItemsSource = Calendar.SelectedDayEvents,
-                        SelectionMode = ListViewSelectionMode.None,
-                        IsRefreshing = false,
                     };
 
                     listView.ItemTemplate = new DataTemplate(() =>
                         {
-                            var itemCell = new TextCell();
+                            var timeLabel = new Label()
+                            {
+                                HorizontalOptions = LayoutOptions.Start,
+                                VerticalOptions = LayoutOptions.CenterAndExpand,
+                            };
+                            timeLabel.SetBinding(Label.TextProperty, "ActivityTime");
 
-                            itemCell.SetBinding(TextCell.TextProperty, "HobbyName");
+                            var nameLabel = new Label()
+                            {
+                                HorizontalOptions = LayoutOptions.StartAndExpand,
+                                VerticalOptions = LayoutOptions.CenterAndExpand,
+                            };
+                            nameLabel.SetBinding(Label.TextProperty, "Hobby.Name");
 
-                            return itemCell;
+                            return new ViewCell()
+                            {
+                                View = new StackLayout()
+                                {
+                                    Children = { timeLabel, nameLabel },
+                                }
+                            };
                         });
 
-                    templateLayout.Children.Add(listView);
-
-                    return templateLayout;
+                    return listView;
                 });
             }
             else if (e.PropertyName == "SelectedDates" && !dayCountPositive)
@@ -81,27 +90,12 @@ namespace MobileAppProject
         {
             if (Calendar.SelectedDates.Count > 0)
             {
-                var activityPage = new ActivityPage(Calendar);
+                var activityPage = new ActivityPage();
                 await Navigation.PushAsync(activityPage);
             } else
             {
                 return;
             }
-        }
-    }
-
-    public class ActivityModel
-    {
-        public DateTime ActivityTime { get; private set; }
-
-        public HobbyModel Hobby { get; private set; }
-
-        public string HobbyName { get { return Hobby.Name; } }
-
-        public ActivityModel(DateTime activityTime, HobbyModel hobby)
-        {
-            ActivityTime = activityTime;
-            Hobby = hobby;
         }
     }
 }
