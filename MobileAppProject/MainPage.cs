@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
+﻿using Xamarin.Forms;
 
 namespace MobileAppProject
 {
@@ -13,7 +6,6 @@ namespace MobileAppProject
     {
         public MainPage()
         {
-            InitializeComponent();
             // Вряд ли это нужно использовать здесь
             Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
@@ -22,9 +14,15 @@ namespace MobileAppProject
             {
                 Title = "My Hobbies",
             });
+
             Children.Add(new SchedulePage()
             {
                 Title = "Schedule",
+            });
+            
+            Children.Add(new NotesPage()
+            {
+                Title = "Notes",
             });
         }
     }
