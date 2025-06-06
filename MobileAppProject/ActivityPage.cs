@@ -40,7 +40,7 @@ namespace MobileAppProject
                 TextColor = Color.Black,
             };
 
-            applyButton.Clicked += (sender, args) => ApplyChangesAndEndTask();
+            applyButton.Clicked += (sender, args) => AddActivity();
 
             layout.Children.Add(label);
             layout.Children.Add(TimePicker);
@@ -50,24 +50,27 @@ namespace MobileAppProject
             Content = layout;
         }
 
-        private async void ApplyChangesAndEndTask()
+        private async void AddActivity()
         {
             foreach (var day in SchedulePage.Calendar.SelectedDates)
             {
                 if (HobbyPicker.SelectedItem == null)
                     break;
+
                 var timeKey = new DateTime(day.Year, day.Month, day.Day, TimePicker.Time.Hours, TimePicker.Time.Minutes, 0);
 
                 if (!SchedulePage.Calendar.Events.ContainsKey(timeKey))
                 {
-                    SchedulePage.Calendar.Events.Add(day, new ObservableCollection<ActivityModel>()
+                    SchedulePage.Calendar.Events.Add(timeKey, new ObservableCollection<ActivityModel>()
                         {
                             new ActivityModel(timeKey, (HobbyModel)HobbyPicker.SelectedItem),
                         });
-                } else // под вопросом
+                } else
                 {
-                    var item = SchedulePage.Calendar.Events[timeKey] as ObservableCollection<ActivityModel>;
-                    item.Add(new ActivityModel(timeKey, (HobbyModel)HobbyPicker.SelectedItem));
+                    SchedulePage.Calendar.Events[timeKey] = new ObservableCollection<ActivityModel>()
+                    {
+                        new ActivityModel(timeKey, (HobbyModel)HobbyPicker.SelectedItem),
+                    };
                 }
             }
 
