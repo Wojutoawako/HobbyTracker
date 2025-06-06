@@ -10,8 +10,6 @@ namespace MobileAppProject
 
         public HobbyListPage()
         {
-            /* для пролистывания списка подходит ScrollView,
-             * надо его подробнее изучить и применить здесь.*/
             var layout = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
