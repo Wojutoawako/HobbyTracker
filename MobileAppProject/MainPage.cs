@@ -6,7 +6,6 @@ namespace MobileAppProject
     {
         public MainPage()
         {
-            // Вряд ли это нужно использовать здесь
             Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
 
