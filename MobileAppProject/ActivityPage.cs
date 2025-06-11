@@ -35,9 +35,14 @@ namespace MobileAppProject
 
             var applyButton = new Button()
             {
+                Margin = new Thickness(10, 10),
+
                 Text = "Apply",
                 FontSize = 20,
                 TextColor = Color.Black,
+
+                BorderWidth = 1,
+                BorderColor = Color.Black,
             };
 
             applyButton.Clicked += (sender, args) => AddActivity();

@@ -4,6 +4,7 @@ using Xamarin.Plugin.Calendar.Controls;
 using System.Collections.Generic;
 using Xamarin.Essentials;
 using System;
+using SkiaSharp;
 
 namespace MobileAppProject
 {
@@ -15,9 +16,11 @@ namespace MobileAppProject
         {
             var frame = new Frame()
             {
-                Margin = new Thickness(0, 0, 0, 10),
+                Margin = new Thickness(10, 0, 10, 10),
+                Padding = new Thickness(10, 10),
 
                 BorderColor = Color.Black,
+                CornerRadius = 15,
             };
 
             var templateContent = new FlexLayout()
@@ -59,9 +62,11 @@ namespace MobileAppProject
 
             var deleteButton = new Button()
             {
-                Text = "Delete",
+                Text = "D",
 
                 HorizontalOptions = LayoutOptions.End,
+
+                Style = Styles.MicroButtonStyle,
             };
 
             deleteButton.Clicked += (sender, args) =>
@@ -101,18 +106,54 @@ namespace MobileAppProject
                 EventTemplate = EventDataTemplate,
 
                 Culture = new CultureInfo("ru-RU"),
+
+                MonthLabelColor = Color.White,
+                YearLabelColor = Color.White,
+
+                SelectedDateColor = Color.White,
+
+                DaysTitleColor = Color.White,
+
+                DeselectedDayTextColor = Color.White,
+                SelectedDayBackgroundColor = Color.White,
+                SelectedDayTextColor = Color.Black,
+
+                TodayOutlineColor = Color.White,
+                TodayFillColor = Color.LightGray,
+                TodayTextColor = Color.Black,
+
+                ArrowsColor = Color.Black,
+
+                EventIndicatorColor = Color.White,
+                EventIndicatorTextColor = Color.White,
+                EventIndicatorSelectedColor = Color.Red,
+                EventIndicatorSelectedTextColor = Color.Black,
+
+                OtherMonthDayIsVisible = false,
+                OtherMonthDayColor = Color.Transparent,
             };
 
-            var layout = new StackLayout();
+            var grid = new Grid();
+
+            var layout = new StackLayout()
+            {
+                BackgroundColor = Color.Transparent,
+            };
 
             var addActivityButton = new Button()
             {
-                Text = "Add",
+                Margin = new Thickness(0, 0, 10, 10),
+
+                Text = "+",
+                FontSize = 30,
+
                 MinimumHeightRequest = 70,
                 MinimumWidthRequest = 100,
 
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.End,
+
+                Style = Styles.MiniButtonStyle,
             };
 
             addActivityButton.Pressed += AddActivity;
@@ -120,7 +161,15 @@ namespace MobileAppProject
             layout.Children.Add(Calendar);
             layout.Children.Add(addActivityButton);
 
-            Content = layout;
+            grid.Children.Add(new GrainEffect()
+            {
+                BackgroundColor = SKColor.Parse("#F88E41"),
+                GrainColor = SKColors.White,
+                Density = 0.05,
+            });
+            grid.Children.Add(layout);
+
+            Content = grid;
         }
 
         private async void AddActivity(object sender, System.EventArgs e)

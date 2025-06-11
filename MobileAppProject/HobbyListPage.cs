@@ -30,39 +30,79 @@ namespace MobileAppProject
 
             listView.ItemTemplate = new DataTemplate(() =>
             {
-                var itemLayout = new StackLayout();
+                var frame = new Frame()
+                {
+                    BorderColor = Color.Black,
+                    CornerRadius = 15,
+                };
 
-                var nameLabel = new Label();
+                var itemLayout = new FlexLayout()
+                {
+                    BackgroundColor = Color.White,
+                };
+
+                var textLayout = new FlexLayout()
+                {
+                    Direction = FlexDirection.Column,
+                };
+
+                var buttonsLayout = new FlexLayout()
+                {
+                    JustifyContent = FlexJustify.End,
+                };
+
+                var nameLabel = new Label()
+                {
+                    FontSize = 24,
+                };
                 nameLabel.SetBinding(Label.TextProperty, "Name");
 
                 var infoButton = new Button()
                 {
-                    Text = "More info",
+                    Margin = new Thickness(5, 0),
+
+                    Text = "I",
+
+                    Style = Styles.MicroButtonStyle,
                 };
 
                 var deleteButton = new Button()
                 {
-                    Text = "Delete",
+                    Margin = new Thickness(5, 0),
+
+                    Text = "D",
+
+                    Style = Styles.MicroButtonStyle,
                 };
 
                 deleteButton.Clicked += 
                     (sender, args) => OnDeleteButtonPressed(listView);
 
-                itemLayout.Children.Add(nameLabel);
-                itemLayout.Children.Add(infoButton);
-                itemLayout.Children.Add(deleteButton);
+                textLayout.Children.Add(nameLabel);
+
+                buttonsLayout.Children.Add(infoButton);
+                buttonsLayout.Children.Add(deleteButton);
+
+                itemLayout.Children.Add(new ContentView() { Content = textLayout });
+                itemLayout.Children.Add(new ContentView() { Content = buttonsLayout });
+
+                frame.Content = itemLayout;
 
                 return new ViewCell()
                 {
-                    View = itemLayout,
+                    View = frame,
                 };
             });
 
             Button addHobbyButton = new Button()
             {
+                Padding = new Thickness(10, 10),
+
                 Text = "Add new hobby",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,
+
+                Style = Styles.LargeButtonStyle,
             };
 
             layout.Children.Add(addHobbyButton);
