@@ -10,6 +10,8 @@ namespace MobileAppProject
             Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
 
+            NavigationPage.SetHasNavigationBar(this, false);
+
             Children.Add(new HobbyListPage()
             {
                 Title = "My Hobbies",
