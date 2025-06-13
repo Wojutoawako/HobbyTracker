@@ -67,10 +67,8 @@ namespace MobileAppProject
                         });
                 } else
                 {
-                    SchedulePage.Calendar.Events[timeKey] = new ObservableCollection<ActivityModel>()
-                    {
-                        new ActivityModel(timeKey, (HobbyModel)HobbyPicker.SelectedItem),
-                    };
+                    var collection = SchedulePage.Calendar.Events[timeKey] as ObservableCollection<ActivityModel>;
+                    collection.Add(new ActivityModel(timeKey, (HobbyModel)HobbyPicker.SelectedItem));
                 }
             }
 
