@@ -5,13 +5,16 @@ namespace MobileAppProject
 {
     public static class Styles
     {
+        public static double DeviceWidth =
+            DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+
         public static Style LargeButtonStyle = new Style(typeof(Button))
         {
             Setters =
             {
                 new Setter() { Property = Button.BackgroundColorProperty, Value = Color.White },
                 new Setter() { Property = Button.CornerRadiusProperty, Value = 60 },
-                new Setter() { Property = Button.WidthRequestProperty, Value = DeviceDisplay.MainDisplayInfo.Width - 20 },
+                new Setter() { Property = Button.WidthRequestProperty, Value = DeviceWidth * 0.85 },
             }
         };
 
@@ -22,8 +25,8 @@ namespace MobileAppProject
                 new Setter() { Property = Button.BackgroundColorProperty, Value = Color.White },
                 new Setter() { Property = Button.TextColorProperty, Value = Color.Black },
                 new Setter() { Property = Button.CornerRadiusProperty, Value = 100 },
-                new Setter() { Property = Button.WidthRequestProperty, Value = 60 },
-                new Setter() { Property = Button.HeightRequestProperty, Value = 60 },
+                new Setter() { Property = Button.WidthRequestProperty, Value = DeviceWidth * 0.2 },
+                new Setter() { Property = Button.HeightRequestProperty, Value = DeviceWidth * 0.2 },
             }
         };
 
@@ -36,8 +39,8 @@ namespace MobileAppProject
                 new Setter() { Property = Button.BorderColorProperty, Value = Color.DeepSkyBlue },
                 new Setter() { Property = Button.CornerRadiusProperty, Value = 15 },
                 new Setter() { Property = Button.BorderWidthProperty, Value = 1 },
-                new Setter() { Property = Button.WidthRequestProperty, Value = 45 },
-                new Setter() { Property = Button.HeightRequestProperty, Value = 45 },
+                new Setter() { Property = Button.WidthRequestProperty, Value = DeviceWidth * 0.1125 },
+                new Setter() { Property = Button.HeightRequestProperty, Value = DeviceWidth * 0.1125 },
             }
         };
     }

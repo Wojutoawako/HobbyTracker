@@ -96,8 +96,6 @@ namespace MobileAppProject
 
             Button addHobbyButton = new Button()
             {
-                Padding = new Thickness(10, 10),
-
                 Text = "Add new hobby",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,

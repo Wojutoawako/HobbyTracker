@@ -35,11 +35,11 @@ namespace MobileAppProject
 
             var applyButton = new Button()
             {
-                Margin = new Thickness(10, 10),
-
                 Text = "Apply",
                 FontSize = 20,
                 TextColor = Color.Black,
+
+                Style = Styles.LargeButtonStyle,
 
                 BorderWidth = 1,
                 BorderColor = Color.Black,
