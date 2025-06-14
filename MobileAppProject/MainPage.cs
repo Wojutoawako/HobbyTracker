@@ -19,19 +19,19 @@ namespace MobileAppProject
             Children.Add(new HobbyListPage()
             {
                 Title = "My Hobbies",
-                IconImageSource = "star.svg",
+                IconImageSource = "hobbies.png",
             });
 
             Children.Add(new SchedulePage()
             {
                 Title = "Schedule",
-                IconImageSource = "schedule.svg",
+                IconImageSource = "schedule.png",
             });
             
             Children.Add(new NotesPage()
             {
                 Title = "Notes",
-                IconImageSource = "notes.svg",
+                IconImageSource = "notes.png",
             });
         }
     }

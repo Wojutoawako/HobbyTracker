@@ -10,39 +10,52 @@ namespace MobileAppProject
     {
         public TimePicker TimePicker;
         public Picker HobbyPicker;
+        public Picker GoalPicker;
 
         public ActivityPage()
         {
             TimePicker = new TimePicker()
             {
+                Margin = new Thickness(0, 0, 0, 10),
+
                 Style = Styles.PickerStyle,
             };
             HobbyPicker = new Picker()
             {
+                Margin = new Thickness(0, 0, 0, 10),
+
                 Title = "Choose a hobby...",
-                TitleColor = Color.White,
                 ItemsSource = HobbyListPage.HobbyList,
                 ItemDisplayBinding = new Binding("Name"),
                 SelectedItem = null,
                 Style = Styles.PickerStyle,
             };
+            GoalPicker = new Picker()
+            {
+                ItemsSource = NotesPage.Notes,
+                Title = "Add goals",
+                Style = Styles.PickerStyle,
+            };
+
 
             var grid = new Grid();
 
-            var layout = new StackLayout()
+            var layout = new FlexLayout()
             {
+                AlignItems = FlexAlignItems.Center,
+                Direction = FlexDirection.Column,
+
                 BackgroundColor = Color.Transparent,
             };
 
-            var pickerLayout = new FlexLayout()
-            {
-                Direction = FlexDirection.Column,
-            };
+            var pickerLayout = new StackLayout();
 
             var selectedDatesLabel = new Label()
             {
-                Text = string.Format($"{SchedulePage.Calendar.SelectedDates.First():dd.MM.yyyy} - {SchedulePage.Calendar.SelectedDates.Last():dd.MM.yyyy}"),
-                FontSize = 20,
+                Margin = new Thickness(0, 10),
+
+                Text = string.Format($"Choosen dates:\n{SchedulePage.Calendar.SelectedDates.First():dd.MM.yyyy} - {SchedulePage.Calendar.SelectedDates.Last():dd.MM.yyyy}"),
+                FontSize = 24,
                 TextColor = Color.White,
             };
 
@@ -59,12 +72,10 @@ namespace MobileAppProject
 
             pickerLayout.Children.Add(TimePicker);
             pickerLayout.Children.Add(HobbyPicker);
+            pickerLayout.Children.Add(GoalPicker);
 
             layout.Children.Add(selectedDatesLabel);
-            layout.Children.Add(new ContentView()
-            {
-                Content = pickerLayout,
-            });
+            layout.Children.Add(pickerLayout);
             layout.Children.Add(applyButton);
 
             grid.Children.Add(new GrainEffect()

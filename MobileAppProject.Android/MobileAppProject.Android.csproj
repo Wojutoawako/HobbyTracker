@@ -93,13 +93,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\notes.svg" />
+    <AndroidResource Include="Resources\drawable\schedule.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\schedule.svg" />
+    <AndroidResource Include="Resources\drawable\notes.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\star.svg" />
+    <AndroidResource Include="Resources\drawable\hobbies.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

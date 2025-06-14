@@ -1,6 +1,5 @@
 ﻿using SkiaSharp;
 using System.Collections.ObjectModel;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MobileAppProject
@@ -14,11 +13,9 @@ namespace MobileAppProject
         {
             var grid = new Grid();
 
-            var layout = new StackLayout
+            var layout = new StackLayout()
             {
-                Orientation = StackOrientation.Vertical,
-                Margin = new Thickness(5, 5),
-                Padding = new Thickness(5, 5),
+                Padding = new Thickness(10, 10),
 
                 BackgroundColor = Color.Transparent,
             };
@@ -26,13 +23,15 @@ namespace MobileAppProject
             var listView = new ListView()
             {
                 ItemsSource = HobbyList,
-                RowHeight = 80,
+                RowHeight = 90,
             };
 
             listView.ItemTemplate = new DataTemplate(() =>
             {
                 var frame = new Frame()
                 {
+                    Margin = new Thickness(0, 0, 0, 10),
+
                     BorderColor = Color.Black,
                     CornerRadius = 15,
                 };
@@ -62,7 +61,7 @@ namespace MobileAppProject
                 {
                     Margin = new Thickness(5, 0),
 
-                    Text = "I",
+                    Text = "i",
 
                     Style = Styles.MicroButtonStyle,
                 };
@@ -97,6 +96,8 @@ namespace MobileAppProject
 
             Button addHobbyButton = new Button()
             {
+                Margin = new Thickness(0, 0, 0, 10),
+
                 Text = "Add new hobby",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,
@@ -121,7 +122,6 @@ namespace MobileAppProject
 
             Content = grid;
         }
-
         private async void OnDeleteButtonPressed(View view)
         {
             var res = await DisplayAlert("Are you shure?",
@@ -142,7 +142,7 @@ namespace MobileAppProject
                 "Choose the hobby you like", cancel, null, HobbyModel.hobbyNames);
 
             if (!result.Equals(cancel))
-                HobbyList.Add(new HobbyModel(result, null));
+                HobbyList.Add(new HobbyModel(result));
         }
     }
 
@@ -152,17 +152,16 @@ namespace MobileAppProject
     public class HobbyModel
     {
         public string Name { get; }
-        public string Description { get; private set; }
+        public string Information { get; private set; }
 
         public static readonly string[] hobbyNames =
         {
             "Reading", "Sports", "Music", "Gaming", "Gardening",
         };
 
-        public HobbyModel(string name, string description)
+        public HobbyModel(string name)
         {
             Name = name;
-            Description = description;
         }
     }
 }

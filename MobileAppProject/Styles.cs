@@ -35,8 +35,8 @@ namespace MobileAppProject
             Setters =
             {
                 new Setter() { Property = Button.BackgroundColorProperty, Value = Color.White },
-                new Setter() { Property = Button.TextColorProperty, Value = Color.DeepSkyBlue },
-                new Setter() { Property = Button.BorderColorProperty, Value = Color.DeepSkyBlue },
+                new Setter() { Property = Button.TextColorProperty, Value = Color.FromHex("#F88E41") },
+                new Setter() { Property = Button.BorderColorProperty, Value = Color.FromHex("#F88E41") },
                 new Setter() { Property = Button.CornerRadiusProperty, Value = 15 },
                 new Setter() { Property = Button.BorderWidthProperty, Value = 1 },
                 new Setter() { Property = Button.WidthRequestProperty, Value = DeviceWidth * 0.1125 },
@@ -50,6 +50,8 @@ namespace MobileAppProject
             {
                 new Setter() { Property = Picker.TitleColorProperty, Value = Color.White },
                 new Setter() { Property = Picker.TextColorProperty, Value = Color.White },
+                new Setter() { Property = Picker.WidthRequestProperty, Value = DeviceWidth * 0.85 },
+                new Setter() { Property = Picker.FontSizeProperty, Value = 24 },
             }
         };
     }
