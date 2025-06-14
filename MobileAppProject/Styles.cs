@@ -43,5 +43,14 @@ namespace MobileAppProject
                 new Setter() { Property = Button.HeightRequestProperty, Value = DeviceWidth * 0.1125 },
             }
         };
+
+        public static Style PickerStyle = new Style(typeof(Picker))
+        {
+            Setters =
+            {
+                new Setter() { Property = Picker.TitleColorProperty, Value = Color.White },
+                new Setter() { Property = Picker.TextColorProperty, Value = Color.White },
+            }
+        };
     }
 }

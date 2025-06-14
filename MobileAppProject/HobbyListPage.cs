@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using System.Collections.ObjectModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MobileAppProject
@@ -25,7 +26,7 @@ namespace MobileAppProject
             var listView = new ListView()
             {
                 ItemsSource = HobbyList,
-                RowHeight = 150,
+                RowHeight = 80,
             };
 
             listView.ItemTemplate = new DataTemplate(() =>
