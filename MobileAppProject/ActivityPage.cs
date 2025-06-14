@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using System;
 using System.Collections.ObjectModel;
+using SkiaSharp;
 
 namespace MobileAppProject
 {
@@ -12,25 +13,37 @@ namespace MobileAppProject
 
         public ActivityPage()
         {
-            TimePicker = new TimePicker();
+            TimePicker = new TimePicker()
+            {
+                Style = Styles.PickerStyle,
+            };
             HobbyPicker = new Picker()
             {
                 Title = "Choose a hobby...",
-                TitleColor = Color.Gray,
+                TitleColor = Color.White,
                 ItemsSource = HobbyListPage.HobbyList,
                 ItemDisplayBinding = new Binding("Name"),
                 SelectedItem = null,
+                Style = Styles.PickerStyle,
             };
 
-            var layout = new StackLayout();
+            var grid = new Grid();
 
-            var label = new Label()
+            var layout = new StackLayout()
             {
-                Text = string.Format("{0} - {1}", 
-                    SchedulePage.Calendar.SelectedDates.First(),
-                    SchedulePage.Calendar.SelectedDates.Last()),
+                BackgroundColor = Color.Transparent,
+            };
+
+            var pickerLayout = new FlexLayout()
+            {
+                Direction = FlexDirection.Column,
+            };
+
+            var selectedDatesLabel = new Label()
+            {
+                Text = string.Format($"{SchedulePage.Calendar.SelectedDates.First():dd.MM.yyyy} - {SchedulePage.Calendar.SelectedDates.Last():dd.MM.yyyy}"),
                 FontSize = 20,
-                TextColor = Color.Black,
+                TextColor = Color.White,
             };
 
             var applyButton = new Button()
@@ -38,16 +51,31 @@ namespace MobileAppProject
                 Text = "Apply",
                 FontSize = 20,
                 TextColor = Color.Black,
+
+                Style = Styles.LargeButtonStyle,
             };
 
             applyButton.Clicked += (sender, args) => AddActivity();
 
-            layout.Children.Add(label);
-            layout.Children.Add(TimePicker);
-            layout.Children.Add(HobbyPicker);
+            pickerLayout.Children.Add(TimePicker);
+            pickerLayout.Children.Add(HobbyPicker);
+
+            layout.Children.Add(selectedDatesLabel);
+            layout.Children.Add(new ContentView()
+            {
+                Content = pickerLayout,
+            });
             layout.Children.Add(applyButton);
 
-            Content = layout;
+            grid.Children.Add(new GrainEffect()
+            {
+                BackgroundColor = SKColor.Parse("#F88E41"),
+                GrainColor = SKColors.White,
+                Density = 0.05,
+            });
+            grid.Children.Add(layout);
+
+            Content = grid;
         }
 
         private async void AddActivity()

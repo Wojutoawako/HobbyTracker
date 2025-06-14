@@ -6,6 +6,8 @@ namespace MobileAppProject
     {
         public App()
         {
+            Current.Resources.Add(Styles.LargeButtonStyle);
+
             MainPage = new NavigationPage(new MainPage());
         }
 

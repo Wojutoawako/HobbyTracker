@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using SkiaSharp;
+using System.Collections.ObjectModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace MobileAppProject
@@ -10,46 +12,86 @@ namespace MobileAppProject
 
         public HobbyListPage()
         {
+            var grid = new Grid();
+
             var layout = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
                 Margin = new Thickness(5, 5),
                 Padding = new Thickness(5, 5),
+
+                BackgroundColor = Color.Transparent,
             };
 
             var listView = new ListView()
             {
                 ItemsSource = HobbyList,
-                RowHeight = 150,
+                RowHeight = 80,
             };
 
             listView.ItemTemplate = new DataTemplate(() =>
             {
-                var itemLayout = new StackLayout();
+                var frame = new Frame()
+                {
+                    BorderColor = Color.Black,
+                    CornerRadius = 15,
+                };
 
-                var nameLabel = new Label();
+                var itemLayout = new FlexLayout()
+                {
+                    BackgroundColor = Color.White,
+                };
+
+                var textLayout = new FlexLayout()
+                {
+                    Direction = FlexDirection.Column,
+                };
+
+                var buttonsLayout = new FlexLayout()
+                {
+                    JustifyContent = FlexJustify.End,
+                };
+
+                var nameLabel = new Label()
+                {
+                    FontSize = 24,
+                };
                 nameLabel.SetBinding(Label.TextProperty, "Name");
 
                 var infoButton = new Button()
                 {
-                    Text = "More info",
+                    Margin = new Thickness(5, 0),
+
+                    Text = "I",
+
+                    Style = Styles.MicroButtonStyle,
                 };
 
                 var deleteButton = new Button()
                 {
-                    Text = "Delete",
+                    Margin = new Thickness(5, 0),
+
+                    Text = "D",
+
+                    Style = Styles.MicroButtonStyle,
                 };
 
                 deleteButton.Clicked += 
                     (sender, args) => OnDeleteButtonPressed(listView);
 
-                itemLayout.Children.Add(nameLabel);
-                itemLayout.Children.Add(infoButton);
-                itemLayout.Children.Add(deleteButton);
+                textLayout.Children.Add(nameLabel);
+
+                buttonsLayout.Children.Add(infoButton);
+                buttonsLayout.Children.Add(deleteButton);
+
+                itemLayout.Children.Add(new ContentView() { Content = textLayout });
+                itemLayout.Children.Add(new ContentView() { Content = buttonsLayout });
+
+                frame.Content = itemLayout;
 
                 return new ViewCell()
                 {
-                    View = itemLayout,
+                    View = frame,
                 };
             });
 
@@ -58,6 +100,8 @@ namespace MobileAppProject
                 Text = "Add new hobby",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,
+
+                Style = Styles.LargeButtonStyle,
             };
 
             layout.Children.Add(addHobbyButton);
@@ -66,7 +110,16 @@ namespace MobileAppProject
             addHobbyButton.Pressed +=
                 (sender, eventArgs) => AddNewHobby();
 
-            Content = layout;
+            grid.Children.Add(new GrainEffect()
+            {
+                BackgroundColor = SKColor.Parse("#F88E41"),
+                GrainColor = SKColors.White,
+                Density = 0.05,
+            });
+
+            grid.Children.Add(layout);
+
+            Content = grid;
         }
 
         private async void OnDeleteButtonPressed(View view)

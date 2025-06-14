@@ -6,25 +6,32 @@ namespace MobileAppProject
     {
         public MainPage()
         {
-            // Вряд ли это нужно использовать здесь
             Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
 
             NavigationPage.SetHasNavigationBar(this, false);
 
+            this.BarBackgroundColor = Color.Black;
+
+            this.UnselectedTabColor = Color.LightGray;
+            this.SelectedTabColor = Color.Yellow;
+
             Children.Add(new HobbyListPage()
             {
                 Title = "My Hobbies",
+                IconImageSource = "star.svg",
             });
 
             Children.Add(new SchedulePage()
             {
                 Title = "Schedule",
+                IconImageSource = "schedule.svg",
             });
             
             Children.Add(new NotesPage()
             {
                 Title = "Notes",
+                IconImageSource = "notes.svg",
             });
         }
     }
