@@ -2,7 +2,6 @@
 using Xamarin.Forms;
 using System;
 using System.Collections.ObjectModel;
-using SkiaSharp;
 
 namespace MobileAppProject
 {
@@ -14,6 +13,8 @@ namespace MobileAppProject
 
         public ActivityPage()
         {
+            BackgroundImageSource = "sport.png";
+
             TimePicker = new TimePicker()
             {
                 Margin = new Thickness(0, 0, 0, 10),
@@ -36,8 +37,6 @@ namespace MobileAppProject
                 Title = "Добавить цели",
                 Style = Styles.PickerStyle,
             };
-
-            var grid = new Grid();
 
             var layout = new FlexLayout()
             {
@@ -77,15 +76,7 @@ namespace MobileAppProject
             layout.Children.Add(pickerLayout);
             layout.Children.Add(applyButton);
 
-            grid.Children.Add(new GrainEffect()
-            {
-                BackgroundColor = SKColor.Parse("#F88E41"),
-                GrainColor = SKColors.White,
-                Density = 0.05,
-            });
-            grid.Children.Add(layout);
-
-            Content = grid;
+            Content = layout;
         }
 
         private async void AddActivity()

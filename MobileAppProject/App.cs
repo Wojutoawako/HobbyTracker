@@ -10,7 +10,7 @@ namespace MobileAppProject
 
             MainPage = new NavigationPage(new MainPage())
             {
-                BarBackgroundColor = Color.FromHex("#F88E41"),
+                BarBackgroundColor = Color.Black,
                 BarTextColor = Color.White,
             };
         }

@@ -4,7 +4,6 @@ using Xamarin.Plugin.Calendar.Controls;
 using System.Collections.Generic;
 using Xamarin.Essentials;
 using System;
-using SkiaSharp;
 
 namespace MobileAppProject
 {
@@ -97,6 +96,8 @@ namespace MobileAppProject
 
         public SchedulePage()
         {
+            BackgroundImageSource = "pink_bicycle.png";
+
             Calendar = new RangeSelectionCalendar()
             {
                 Padding = new Thickness(10),
@@ -136,8 +137,6 @@ namespace MobileAppProject
                 OtherMonthDayColor = Color.Transparent,
             };
 
-            var grid = new Grid();
-
             var layout = new StackLayout()
             {
                 Orientation = StackOrientation.Vertical,
@@ -171,15 +170,7 @@ namespace MobileAppProject
             layout.Children.Add(Calendar);
             layout.Children.Add(buttonBox);
 
-            grid.Children.Add(new GrainEffect()
-            {
-                BackgroundColor = SKColor.Parse("#F88E41"),
-                GrainColor = SKColors.White,
-                Density = 0.05,
-            });
-            grid.Children.Add(layout);
-
-            Content = grid;
+            Content = layout;
         }
 
         private async void AddActivity(object sender, System.EventArgs e)

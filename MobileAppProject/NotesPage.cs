@@ -34,6 +34,11 @@ namespace MobileAppProject
             var planButton = new Button()
             {
                 Text = "Поставить цель",
+
+
+
+
+
             };
 
             planButton.Clicked += AddPlanTags;

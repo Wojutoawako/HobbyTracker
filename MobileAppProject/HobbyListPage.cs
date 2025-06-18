@@ -1,5 +1,4 @@
-﻿using SkiaSharp;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace MobileAppProject
@@ -11,7 +10,7 @@ namespace MobileAppProject
 
         public HobbyListPage()
         {
-            var grid = new Grid();
+            BackgroundImageSource = "nature.png";
 
             var layout = new StackLayout()
             {
@@ -111,16 +110,7 @@ namespace MobileAppProject
             addHobbyButton.Pressed +=
                 (sender, eventArgs) => AddNewHobby();
 
-            grid.Children.Add(new GrainEffect()
-            {
-                BackgroundColor = SKColor.Parse("#F88E41"),
-                GrainColor = SKColors.White,
-                Density = 0.05,
-            });
-
-            grid.Children.Add(layout);
-
-            Content = grid;
+            Content = layout;
         }
         private async void OnDeleteButtonPressed(View view)
         {
