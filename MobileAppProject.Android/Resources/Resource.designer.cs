@@ -21906,19 +21906,16 @@ namespace MobileAppProject.Droid
 			public const int preference_list_divider_material = 2131165326;
 			
 			// aapt resource value: 0x7F07008F
-			public const int rec_bin = 2131165327;
+			public const int schedule = 2131165327;
 			
 			// aapt resource value: 0x7F070090
-			public const int schedule = 2131165328;
+			public const int test_custom_background = 2131165328;
 			
 			// aapt resource value: 0x7F070091
-			public const int test_custom_background = 2131165329;
+			public const int tooltip_frame_dark = 2131165329;
 			
 			// aapt resource value: 0x7F070092
-			public const int tooltip_frame_dark = 2131165330;
-			
-			// aapt resource value: 0x7F070093
-			public const int tooltip_frame_light = 2131165331;
+			public const int tooltip_frame_light = 2131165330;
 			
 			static Drawable()
 			{

@@ -24,7 +24,7 @@ namespace MobileAppProject
             {
                 Margin = new Thickness(0, 0, 0, 10),
 
-                Title = "Choose a hobby...",
+                Title = "Выберите хобби...",
                 ItemsSource = HobbyListPage.HobbyList,
                 ItemDisplayBinding = new Binding("Name"),
                 SelectedItem = null,
@@ -33,10 +33,9 @@ namespace MobileAppProject
             GoalPicker = new Picker()
             {
                 ItemsSource = NotesPage.Notes,
-                Title = "Add goals",
+                Title = "Добавить цели",
                 Style = Styles.PickerStyle,
             };
-
 
             var grid = new Grid();
 
@@ -54,14 +53,14 @@ namespace MobileAppProject
             {
                 Margin = new Thickness(0, 10),
 
-                Text = string.Format($"Choosen dates:\n{SchedulePage.Calendar.SelectedDates.First():dd.MM.yyyy} - {SchedulePage.Calendar.SelectedDates.Last():dd.MM.yyyy}"),
+                Text = string.Format($"Выбранные даты:\n{SchedulePage.Calendar.SelectedDates.First():dd.MM.yyyy} - {SchedulePage.Calendar.SelectedDates.Last():dd.MM.yyyy}"),
                 FontSize = 24,
                 TextColor = Color.White,
             };
 
             var applyButton = new Button()
             {
-                Text = "Apply",
+                Text = "Применить",
                 FontSize = 20,
                 TextColor = Color.Black,
 

@@ -99,6 +99,8 @@ namespace MobileAppProject
         {
             Calendar = new RangeSelectionCalendar()
             {
+                Padding = new Thickness(10),
+
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 VerticalOptions = LayoutOptions.StartAndExpand,
 
@@ -115,6 +117,7 @@ namespace MobileAppProject
                 DaysTitleColor = Color.White,
 
                 DeselectedDayTextColor = Color.White,
+
                 SelectedDayBackgroundColor = Color.White,
                 SelectedDayTextColor = Color.Black,
 
@@ -137,7 +140,15 @@ namespace MobileAppProject
 
             var layout = new StackLayout()
             {
+                Orientation = StackOrientation.Vertical,
+
                 BackgroundColor = Color.Transparent,
+            };
+
+            var buttonBox = new AbsoluteLayout()
+            {
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.End,
             };
 
             var addActivityButton = new Button()
@@ -150,16 +161,15 @@ namespace MobileAppProject
                 MinimumHeightRequest = 70,
                 MinimumWidthRequest = 100,
 
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.End,
-
                 Style = Styles.MiniButtonStyle,
             };
+
+            buttonBox.Children.Add(addActivityButton);
 
             addActivityButton.Pressed += AddActivity;
 
             layout.Children.Add(Calendar);
-            layout.Children.Add(addActivityButton);
+            layout.Children.Add(buttonBox);
 
             grid.Children.Add(new GrainEffect()
             {

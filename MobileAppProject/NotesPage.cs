@@ -25,7 +25,7 @@ namespace MobileAppProject
 
                 AutoSize = EditorAutoSizeOption.TextChanges,
 
-                Placeholder = "Feel free to write your thoughts here!",
+                Placeholder = "Вы можете написать здесь всё, что думаете!",
                 Keyboard = Keyboard.Text,
             };
 
@@ -33,7 +33,7 @@ namespace MobileAppProject
 
             var planButton = new Button()
             {
-                Text = "Make goal",
+                Text = "Поставить цель",
             };
 
             planButton.Clicked += AddPlanTags;

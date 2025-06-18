@@ -98,7 +98,7 @@ namespace MobileAppProject
             {
                 Margin = new Thickness(0, 0, 0, 10),
 
-                Text = "Add new hobby",
+                Text = "Выбрать хобби",
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,
 
@@ -124,8 +124,8 @@ namespace MobileAppProject
         }
         private async void OnDeleteButtonPressed(View view)
         {
-            var res = await DisplayAlert("Are you shure?",
-                "Are you shure you want to remove that hobby?", "Yes", "No");
+            var res = await DisplayAlert("Вы уверены?",
+                "Вы действительно хотите удалить это хобби?", "Да", "Нет");
             if (res)
             {
                 var listView = view as ListView;
@@ -137,9 +137,9 @@ namespace MobileAppProject
 
         protected async void AddNewHobby()
         {
-            var cancel = "Later";
+            var cancel = "Позже";
             var result = await DisplayActionSheet(
-                "Choose the hobby you like", cancel, null, HobbyModel.hobbyNames);
+                "Выберите хобби, которое вас заинтересовало", cancel, null, HobbyModel.hobbyNames);
 
             if (!result.Equals(cancel))
                 HobbyList.Add(new HobbyModel(result));
@@ -156,7 +156,7 @@ namespace MobileAppProject
 
         public static readonly string[] hobbyNames =
         {
-            "Reading", "Sports", "Music", "Gaming", "Gardening",
+            "Чтение", "Спорт", "Музыка", "Видеоигры", "Садоводство",
         };
 
         public HobbyModel(string name)
