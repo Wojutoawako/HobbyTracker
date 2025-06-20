@@ -122,7 +122,7 @@ namespace MobileAppProject
 
         public SchedulePage()
         {
-            BackgroundImageSource = "pink_bicycle.png";
+            BackgroundImageSource = "bicycle.png";
 
             Calendar = new RangeSelectionCalendar()
             {

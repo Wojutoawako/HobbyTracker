@@ -14,7 +14,7 @@ namespace MobileAppProject
 
         public NotesPage()
         {
-            BackgroundImageSource = "paper.png";
+            BackgroundImageSource = "birds.png";
 
             var layout = new FlexLayout()
             {
@@ -104,15 +104,11 @@ namespace MobileAppProject
 
                 VerticalOptions = LayoutOptions.Fill,
             };
-            FlexLayout.SetGrow(listView, 2);
 
             var addNoteButton = new Button()
             {
                 Text = "+",
                 FontSize = 30,
-
-                BorderColor = Color.Black,
-                BorderWidth = 1,
 
                 Style = Styles.MiniButtonStyle,
             };
