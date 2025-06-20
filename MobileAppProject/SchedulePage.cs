@@ -3,7 +3,7 @@ using Xamarin.Forms;
 using Xamarin.Plugin.Calendar.Controls;
 using System.Collections.Generic;
 using Xamarin.Essentials;
-using System;
+using System.Collections.ObjectModel;
 
 namespace MobileAppProject
 {
@@ -24,6 +24,11 @@ namespace MobileAppProject
 
             var templateContent = new FlexLayout()
             {
+                Direction = FlexDirection.Row,
+
+                HorizontalOptions = LayoutOptions.Fill,
+                VerticalOptions = LayoutOptions.Fill,
+
                 JustifyContent = FlexJustify.SpaceBetween,
                 AlignItems = FlexAlignItems.Center,
             };
@@ -32,10 +37,15 @@ namespace MobileAppProject
             {
                 Direction = FlexDirection.Column,
             };
+            FlexLayout.SetGrow(templateText, 2);
 
-            var templateButtons = new FlexLayout()
+            var templateButtons = new StackLayout()
             {
-                JustifyContent = FlexJustify.End,
+                Orientation = StackOrientation.Horizontal,
+
+                HorizontalOptions = LayoutOptions.End,
+
+                Spacing = 10,
             };
 
             var timeLabel = new Label()
@@ -52,11 +62,11 @@ namespace MobileAppProject
             };
             nameLabel.SetBinding(Label.TextProperty, "Hobby.Name");
 
-            var timeKey = new DateTime();
+            ActivityModel activity = null;
             timeLabel.BindingContextChanged += (sender, args) =>
             {
                 if (timeLabel.BindingContext is ActivityModel act)
-                    timeKey = act.ActivityTime;
+                    activity = act;
             };
 
             var deleteButton = new Button()
@@ -65,17 +75,33 @@ namespace MobileAppProject
 
                 HorizontalOptions = LayoutOptions.End,
 
+                Command = new Command(() =>
+                {
+                    var collection = Calendar.Events[activity.ActivityTime] as ObservableCollection<ActivityModel>;
+                    collection.RemoveAt(collection.IndexOf(activity));
+                }),
+
                 Style = Styles.MicroButtonStyle,
             };
 
-            deleteButton.Clicked += (sender, args) =>
+            var editButton = new Button()
             {
-                Calendar.Events.Remove(timeKey);
+                Text = "E",
+
+                HorizontalOptions = LayoutOptions.End,
+
+                Command = new Command(() =>
+                {
+                    (App.Current.MainPage as NavigationPage).Navigation.PushAsync(new ActivityPage(activity));
+                }),
+
+                Style = Styles.MicroButtonStyle,
             };
 
             templateText.Children.Add(timeLabel);
             templateText.Children.Add(nameLabel);
 
+            templateButtons.Children.Add(editButton);
             templateButtons.Children.Add(deleteButton);
 
             templateContent.Children.Add(new ContentView()
