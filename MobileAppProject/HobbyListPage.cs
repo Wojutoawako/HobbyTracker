@@ -116,14 +116,16 @@ namespace MobileAppProject
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,
 
+                Command = new Command(() =>
+                {
+                    AddNewHobby();
+                }),
+
                 Style = Styles.LargeButtonStyle,
             };
 
             layout.Children.Add(addHobbyButton);
             layout.Children.Add(listView);
-
-            addHobbyButton.Pressed +=
-                (sender, eventArgs) => AddNewHobby();
 
             Content = layout;
         }

@@ -111,11 +111,14 @@ namespace MobileAppProject
                 Text = "+",
                 FontSize = 30,
 
+                Command = new Command(() =>
+                {
+                    AddNote();
+                }),
+
                 Style = Styles.MiniButtonStyle,
             };
             FlexLayout.SetAlignSelf(addNoteButton, FlexAlignSelf.End);
-
-            addNoteButton.Clicked += AddNote;
 
             layout.Children.Add(listView);
             layout.Children.Add(addNoteButton);
@@ -123,7 +126,7 @@ namespace MobileAppProject
             Content = layout;
         }
 
-        private async void AddNote(object sender, System.EventArgs e)
+        private async void AddNote()
         {
             var page = new SingleNotePage();
             await Navigation.PushAsync(page);
