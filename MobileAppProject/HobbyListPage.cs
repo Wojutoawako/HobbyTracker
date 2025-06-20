@@ -108,7 +108,7 @@ namespace MobileAppProject
                 RowHeight = 90,
             };
 
-            Button addHobbyButton = new Button()
+            var addHobbyButton = new Button()
             {
                 Margin = new Thickness(0, 0, 0, 10),
 

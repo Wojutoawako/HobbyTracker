@@ -104,6 +104,7 @@ namespace MobileAppProject
 
                 VerticalOptions = LayoutOptions.Fill,
             };
+            FlexLayout.SetGrow(listView, 2);
 
             var addNoteButton = new Button()
             {
