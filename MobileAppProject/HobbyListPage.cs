@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using Newtonsoft.Json;
+using PCLStorage;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using Xamarin.Forms;
 
 namespace MobileAppProject
@@ -108,7 +111,7 @@ namespace MobileAppProject
                 RowHeight = 90,
             };
 
-            Button addHobbyButton = new Button()
+            var addHobbyButton = new Button()
             {
                 Margin = new Thickness(0, 0, 0, 10),
 
@@ -119,8 +122,39 @@ namespace MobileAppProject
                 Style = Styles.LargeButtonStyle,
             };
 
+            var save = new Button()
+            {
+                Text = "Save",
+                Command = new Command(async () =>
+                {
+                    var rootFolder = FileSystem.Current.LocalStorage;
+                    var saveFolder = await rootFolder.CreateFolderAsync("HTSave", CreationCollisionOption.OpenIfExists);
+
+                    var saveFile = await saveFolder.CreateFileAsync("saved", CreationCollisionOption.ReplaceExisting);
+
+                    await saveFile.WriteAllTextAsync(JsonConvert.SerializeObject(HobbyListPage.HobbyList));
+                }),
+            };
+            var resolve = new Button()
+            {
+                Text = "resolve",
+                Command = new Command(async () =>
+                {
+                    var rootFolder = FileSystem.Current.LocalStorage;
+                    var saveFolder = await rootFolder.CreateFolderAsync("HTSave", CreationCollisionOption.OpenIfExists);
+
+                    var file = await saveFolder.GetFileAsync("saved");
+                    HobbyList = JsonConvert.DeserializeObject<ObservableCollection<HobbyModel>>(file.ReadAllTextAsync().Result);
+                    HobbyList.Add(null);
+                    HobbyList.Remove(null);
+                }),
+            };
+
             layout.Children.Add(addHobbyButton);
             layout.Children.Add(listView);
+
+            layout.Children.Add(save); 
+            layout.Children.Add(resolve);
 
             addHobbyButton.Pressed +=
                 (sender, eventArgs) => AddNewHobby();

@@ -1,4 +1,8 @@
-﻿using Xamarin.Forms;
+﻿using Newtonsoft.Json;
+using PCLStorage;
+using System.Collections.ObjectModel;
+using System.IO;
+using Xamarin.Forms;
 
 namespace MobileAppProject
 {
@@ -15,7 +19,7 @@ namespace MobileAppProject
         {
         }
 
-        protected override void OnSleep()
+        protected override async void OnSleep()
         {
         }
 
