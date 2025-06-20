@@ -22,76 +22,91 @@ namespace MobileAppProject
             var listView = new ListView()
             {
                 ItemsSource = HobbyList,
+                ItemTemplate = new DataTemplate(() =>
+                {
+                    var frame = new Frame()
+                    {
+                        Margin = new Thickness(0, 0, 0, 10),
+
+                        BorderColor = Color.Black,
+                        CornerRadius = 15,
+                    };
+
+                    var itemLayout = new FlexLayout()
+                    {
+                        BackgroundColor = Color.White,
+                    };
+
+                    var textLayout = new FlexLayout()
+                    {
+                        Direction = FlexDirection.Column,
+                    };
+
+                    var buttonsLayout = new FlexLayout()
+                    {
+                        JustifyContent = FlexJustify.End,
+                    };
+
+                    var nameLabel = new Label()
+                    {
+                        FontSize = 24,
+                    };
+                    nameLabel.SetBinding(Label.TextProperty, "Name");
+
+                    HobbyModel hobby = null;
+                    nameLabel.BindingContextChanged += (sender, args) =>
+                    {
+                        if (nameLabel.BindingContext is HobbyModel h)
+                            hobby = h;
+                    };
+
+                    var infoButton = new Button()
+                    {
+                        Margin = new Thickness(5, 0),
+
+                        Text = "i",
+
+                        Style = Styles.MicroButtonStyle,
+                    };
+
+                    var deleteButton = new Button()
+                    {
+                        Margin = new Thickness(5, 0),
+
+                        Text = "D",
+
+                        Command = new Command(async () =>
+                        {
+                            var res = await DisplayAlert("Вы уверены?", "Вы действительно хотите удалить это хобби?", "Да", "Нет");
+                            if (res)
+                            {
+                                HobbyList.RemoveAt(HobbyList.IndexOf(hobby));
+                            }
+                        }),
+
+                        Style = Styles.MicroButtonStyle,
+                    };
+
+                    textLayout.Children.Add(nameLabel);
+
+                    //buttonsLayout.Children.Add(infoButton);
+                    buttonsLayout.Children.Add(deleteButton);
+
+                    itemLayout.Children.Add(new ContentView() { Content = textLayout });
+                    itemLayout.Children.Add(new ContentView() { Content = buttonsLayout });
+
+                    frame.Content = itemLayout;
+
+                    return new ViewCell()
+                    {
+                        View = frame,
+                    };
+                }),
+
+                SelectionMode = ListViewSelectionMode.None,
+
                 RowHeight = 90,
             };
-
-            listView.ItemTemplate = new DataTemplate(() =>
-            {
-                var frame = new Frame()
-                {
-                    Margin = new Thickness(0, 0, 0, 10),
-
-                    BorderColor = Color.Black,
-                    CornerRadius = 15,
-                };
-
-                var itemLayout = new FlexLayout()
-                {
-                    BackgroundColor = Color.White,
-                };
-
-                var textLayout = new FlexLayout()
-                {
-                    Direction = FlexDirection.Column,
-                };
-
-                var buttonsLayout = new FlexLayout()
-                {
-                    JustifyContent = FlexJustify.End,
-                };
-
-                var nameLabel = new Label()
-                {
-                    FontSize = 24,
-                };
-                nameLabel.SetBinding(Label.TextProperty, "Name");
-
-                var infoButton = new Button()
-                {
-                    Margin = new Thickness(5, 0),
-
-                    Text = "i",
-
-                    Style = Styles.MicroButtonStyle,
-                };
-
-                var deleteButton = new Button()
-                {
-                    Margin = new Thickness(5, 0),
-
-                    Text = "D",
-
-                    Style = Styles.MicroButtonStyle,
-                };
-
-                deleteButton.Clicked += 
-                    (sender, args) => OnDeleteButtonPressed(listView);
-
-                textLayout.Children.Add(nameLabel);
-
-                //buttonsLayout.Children.Add(infoButton);
-                buttonsLayout.Children.Add(deleteButton);
-
-                itemLayout.Children.Add(new ContentView() { Content = textLayout });
-                itemLayout.Children.Add(new ContentView() { Content = buttonsLayout });
-
-                frame.Content = itemLayout;
-
-                return new ViewCell()
-                {
-                    View = frame,
-                };
-            });
 
             Button addHobbyButton = new Button()
             {
@@ -112,18 +127,6 @@ namespace MobileAppProject
 
             Content = layout;
         }
-        private async void OnDeleteButtonPressed(View view)
-        {
-            var res = await DisplayAlert("Вы уверены?",
-                "Вы действительно хотите удалить это хобби?", "Да", "Нет");
-            if (res)
-            {
-                var listView = view as ListView;
-                var item = listView.SelectedItem as HobbyModel;
-
-                HobbyList.Remove(item);
-            }
-        }
 
         protected async void AddNewHobby()
         {
@@ -136,9 +139,6 @@ namespace MobileAppProject
         }
     }
 
-    /// <summary>
-    /// Класс модели хобби. Содержит отображаемые название, описание, а также краткую сводку статистики активности.
-    /// </summary>
     public class HobbyModel
     {
         public string Name { get; }
