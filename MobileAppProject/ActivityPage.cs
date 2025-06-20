@@ -11,8 +11,13 @@ namespace MobileAppProject
         public Picker HobbyPicker;
         public Picker GoalPicker;
 
+        private bool _isChanging;
+        private ActivityModel _activity;
+
         public ActivityPage()
         {
+            _isChanging = false;
+
             BackgroundImageSource = "sport.png";
 
             var mainPage = App.Current.MainPage as NavigationPage;
@@ -71,10 +76,16 @@ namespace MobileAppProject
 
                 VerticalOptions = LayoutOptions.End,
 
+                Command = new Command(() =>
+                {
+                    if (!_isChanging)
+                        AddActivity();
+                    else
+                        EditActivity();
+                }),
+
                 Style = Styles.LargeButtonStyle,
             };
-
-            applyButton.Clicked += (sender, args) => AddActivity();
 
             pickerLayout.Children.Add(TimePicker);
             pickerLayout.Children.Add(HobbyPicker);
@@ -85,6 +96,27 @@ namespace MobileAppProject
             layout.Children.Add(applyButton);
 
             Content = layout;
+        }
+
+        public ActivityPage(ActivityModel activityModel) : this()
+        {
+            _isChanging = true;
+            _activity = activityModel;
+
+            TimePicker.Time = activityModel.ActivityTime.TimeOfDay;
+            HobbyPicker.SelectedItem = activityModel.Hobby;
+        }
+
+        private async void EditActivity()
+        {
+            var collection = SchedulePage.Calendar.Events[_activity.ActivityTime] as ObservableCollection<ActivityModel>;
+
+            var date = _activity.ActivityTime.Date;
+
+            var timeKey = new DateTime(date.Year, date.Month, date.Day, TimePicker.Time.Hours, TimePicker.Time.Minutes, 0);
+            collection[collection.IndexOf(_activity)] = new ActivityModel(timeKey, HobbyPicker.SelectedItem as HobbyModel);
+
+            await Navigation.PopAsync();
         }
 
         private async void AddActivity()
