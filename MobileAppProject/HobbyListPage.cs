@@ -79,7 +79,7 @@ namespace MobileAppProject
 
                 textLayout.Children.Add(nameLabel);
 
-                buttonsLayout.Children.Add(infoButton);
+                //buttonsLayout.Children.Add(infoButton);
                 buttonsLayout.Children.Add(deleteButton);
 
                 itemLayout.Children.Add(new ContentView() { Content = textLayout });

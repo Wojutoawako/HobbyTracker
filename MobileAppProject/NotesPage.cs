@@ -6,77 +6,158 @@ namespace MobileAppProject
 {
     public class NotesPage : ContentPage
     {
-        public static ObservableCollection<string> Notes = new ObservableCollection<string>();
+        public static ObservableCollection<NoteItem> Notes = 
+            new ObservableCollection<NoteItem>();
 
-        public Editor textEditor;
+        public static ObservableCollection<string> Goals =
+            new ObservableCollection<string>();
 
         public NotesPage()
         {
+            BackgroundImageSource = "paper.png";
+
             var layout = new FlexLayout()
             {
+                Padding = new Thickness(10, 10),
+
                 Direction = FlexDirection.Column,
+
+                VerticalOptions = LayoutOptions.Fill,
+                HorizontalOptions = LayoutOptions.Fill,
             };
 
-            textEditor = new Editor()
+            var listView = new ListView()
             {
-                VerticalOptions = LayoutOptions.StartAndExpand,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                MinimumHeightRequest = 500,
+                ItemsSource = Notes,
+                ItemTemplate = new DataTemplate(() =>
+                {
+                    var templateLayout = new FlexLayout()
+                    {
+                        AlignItems = FlexAlignItems.Center,
 
-                AutoSize = EditorAutoSizeOption.TextChanges,
+                        HorizontalOptions = LayoutOptions.Fill,
+                        VerticalOptions = LayoutOptions.Fill,
+                    };
 
-                Placeholder = "Вы можете написать здесь всё, что думаете!",
-                Keyboard = Keyboard.Text,
+                    var textLabel = new Label()
+                    {
+                        FontSize = 24,
+                        TextColor = Color.Black,
+                        VerticalTextAlignment = TextAlignment.Center,
+                    };
+                    textLabel.SetBinding(Label.TextProperty, "Preview");
+                    FlexLayout.SetGrow(textLabel, 2);
+
+                    NoteItem note = null;
+                    textLabel.BindingContextChanged += (sender, args) =>
+                    {
+                        if (textLabel.BindingContext is NoteItem n)
+                            note = n;
+                    };
+
+                    var deleteButton = new Button()
+                    {
+                        Text = "D",
+
+                        Command = new Command(async () =>
+                        {
+                            var res = await DisplayAlert("Вы уверены?", "Эта заметка будет удалена", "Продолжить", "Отменить");
+                            if (res)
+                                Notes.Remove(note);
+                        }),
+
+                        Style = Styles.MicroButtonStyle,
+                    };
+
+                    templateLayout.Children.Add(textLabel);
+                    templateLayout.Children.Add(deleteButton);
+
+                    var frame = new Frame()
+                    {
+                        Margin = new Thickness(0, 0, 0, 10),
+
+                        CornerRadius = 15,
+                        BorderColor = Color.Black,
+
+                        GestureRecognizers =
+                        {
+                            new TapGestureRecognizer()
+                            {
+                                Command = new Command(() =>
+                                {
+                                    ChangeNote(note);
+                                }),
+                            },
+                        },
+                    };
+
+                    frame.Content = templateLayout;
+
+                    return new ViewCell()
+                    {
+                        View = frame,
+                    };
+                }),
+
+                SelectionMode = ListViewSelectionMode.None,
+                RowHeight = 90,
+
+                VerticalOptions = LayoutOptions.Fill,
             };
+            FlexLayout.SetGrow(listView, 2);
 
-            textEditor.TextChanged += TextChanged;
-
-            var planButton = new Button()
+            var addNoteButton = new Button()
             {
-                Text = "Поставить цель",
+                Text = "+",
+                FontSize = 30,
 
+                BorderColor = Color.Black,
+                BorderWidth = 1,
 
-
-
-
+                Style = Styles.MiniButtonStyle,
             };
+            FlexLayout.SetAlignSelf(addNoteButton, FlexAlignSelf.End);
 
-            planButton.Clicked += AddPlanTags;
+            addNoteButton.Clicked += AddNote;
 
-            layout.Children.Add(textEditor);
-            layout.Children.Add(planButton);
+            layout.Children.Add(listView);
+            layout.Children.Add(addNoteButton);
 
             Content = layout;
         }
 
-        private void AddPlanTags(object sender, System.EventArgs e)
+        private async void AddNote(object sender, System.EventArgs e)
         {
-
+            var page = new SingleNotePage();
+            await Navigation.PushAsync(page);
         }
 
-        private void TextChanged(object sender, TextChangedEventArgs e)
+        private void ChangeNote(NoteItem node)
         {
-            var editor = (Editor)sender;
+            var page = new SingleNotePage(node);
+            Navigation.PushAsync(page);
+        }
+    }
 
-            Notes.Clear();
-            
-            var tagOpen = @"<goal>";
-            var tagClose = @"</goal>";
+    public class NoteItem
+    {
+        public int Id { get; private set; } 
+        public string Text { get; private set; }
 
-            var text = e.NewTextValue;
+        public string Preview { get { return string.Join(" ", Text.Split(' ').Take(5)); } }
 
-            var split = text.Split(new[] { tagOpen, tagClose }, System.StringSplitOptions.RemoveEmptyEntries);
+        private static int LastId = 0;
 
-            if (text.IndexOf(tagOpen) != 0)
-                split = split.Skip(1).ToArray();
-            if (text.LastIndexOf(tagClose) != text.Length - tagClose.Length)
-                split = split.Take(split.Length - 1).ToArray();
+        public NoteItem(string text)
+        {
+            Text = text;
+            Id = LastId++;
+        }
 
-            for (int i = 0; i < split.Length; i += 2)
-            {
-                if (!string.IsNullOrEmpty(split[i]))
-                    Notes.Add(split[i]);
-            }
+        public NoteItem(int id, string text)
+        {
+            Id = id;
+            Text = text;
         }
     }
 }

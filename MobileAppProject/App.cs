@@ -8,11 +8,7 @@ namespace MobileAppProject
         {
             Current.Resources.Add(Styles.LargeButtonStyle);
 
-            MainPage = new NavigationPage(new MainPage())
-            {
-                BarBackgroundColor = Color.Black,
-                BarTextColor = Color.White,
-            };
+            MainPage = new NavigationPage(new MainPage());
         }
 
         protected override void OnStart()

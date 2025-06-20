@@ -15,6 +15,10 @@ namespace MobileAppProject
         {
             BackgroundImageSource = "sport.png";
 
+            var mainPage = App.Current.MainPage as NavigationPage;
+            mainPage.BarBackgroundColor = Color.Black; 
+            mainPage.BarTextColor = Color.White;
+
             TimePicker = new TimePicker()
             {
                 Margin = new Thickness(0, 0, 0, 10),
@@ -33,7 +37,7 @@ namespace MobileAppProject
             };
             GoalPicker = new Picker()
             {
-                ItemsSource = NotesPage.Notes,
+                ItemsSource = NotesPage.Goals,
                 Title = "Добавить цели",
                 Style = Styles.PickerStyle,
             };
@@ -42,6 +46,8 @@ namespace MobileAppProject
             {
                 AlignItems = FlexAlignItems.Center,
                 Direction = FlexDirection.Column,
+
+                VerticalOptions = LayoutOptions.StartAndExpand,
 
                 BackgroundColor = Color.Transparent,
             };
@@ -62,6 +68,8 @@ namespace MobileAppProject
                 Text = "Применить",
                 FontSize = 20,
                 TextColor = Color.Black,
+
+                VerticalOptions = LayoutOptions.End,
 
                 Style = Styles.LargeButtonStyle,
             };
