@@ -43,8 +43,9 @@ namespace MobileAppProject
 
                     var textLabel = new Label()
                     {
-                        FontSize = 24,
+                        FontSize = 16,
                         TextColor = Color.Black,
+                        FontAttributes = FontAttributes.Bold,
                         VerticalTextAlignment = TextAlignment.Center,
                     };
                     textLabel.SetBinding(Label.TextProperty, "Preview");
@@ -178,7 +179,14 @@ namespace MobileAppProject
         public int Id { get; private set; } 
         public string Text { get; private set; }
 
-        public string Preview { get { return string.Join(" ", Text.Split(' ').Take(5)); } }
+        public string Preview 
+        {
+            get
+            {
+                var firstFive = string.Join(" ", Text.Split(' ').Take(5));
+                return firstFive.Length > 33 ? new string(firstFive.Take(30).Concat(new[] {'.', '.', '.'}).ToArray()) : firstFive;
+            }
+        }
 
         private static int LastId = 0;
 
