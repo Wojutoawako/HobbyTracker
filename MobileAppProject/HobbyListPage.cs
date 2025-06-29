@@ -119,6 +119,11 @@ namespace MobileAppProject
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.End,
 
+                Command = new Command(() =>
+                {
+                    AddNewHobby();
+                }),
+
                 Style = Styles.LargeButtonStyle,
             };
 
