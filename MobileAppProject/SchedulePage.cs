@@ -4,10 +4,14 @@ using Xamarin.Plugin.Calendar.Controls;
 using System.Collections.Generic;
 using Xamarin.Essentials;
 using System.Collections.ObjectModel;
+using PCLStorage;
+using Newtonsoft.Json;
+using Xamarin.Plugin.Calendar.Models;
+using System;
 
 namespace MobileAppProject
 {
-    public class SchedulePage : ContentPage
+    public class SchedulePage : ContentPageExtension
     {
         public static Xamarin.Plugin.Calendar.Controls.Calendar Calendar;
 
@@ -208,6 +212,27 @@ namespace MobileAppProject
             } else
             {
                 return;
+            }
+        }
+
+        public override async void SavePageData()
+        {
+            var saveFile = await App.SaveFolder.CreateFileAsync("SchedulePageSave", CreationCollisionOption.ReplaceExisting);
+
+            await saveFile.WriteAllTextAsync(JsonConvert.SerializeObject(Calendar.Events));
+        }
+
+        public override async void LoadPageData()
+        {
+            if (App.SaveFolder.CheckExistsAsync("SchedulePageSave").Result == ExistenceCheckResult.FileExists)
+            {
+                var saveFile = await App.SaveFolder.GetFileAsync("SchedulePageSave");
+
+                var saveFileData = JsonConvert.DeserializeObject<Dictionary<DateTime, ObservableCollection<ActivityModel>>>(saveFile.ReadAllTextAsync().Result);
+                foreach (var item in saveFileData)
+                {
+                    Calendar.Events.Add(item.Key, item.Value);
+                }
             }
         }
     }

@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 using PCLStorage;
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
 using Xamarin.Forms;
 
 namespace MobileAppProject
 {
-    public class HobbyListPage : ContentPage
+    public class HobbyListPage : ContentPageExtension
     {
         public static ObservableCollection<HobbyModel> HobbyList 
             = new ObservableCollection<HobbyModel>();
@@ -127,42 +126,8 @@ namespace MobileAppProject
                 Style = Styles.LargeButtonStyle,
             };
 
-            var save = new Button()
-            {
-                Text = "Save",
-                Command = new Command(async () =>
-                {
-                    var rootFolder = FileSystem.Current.LocalStorage;
-                    var saveFolder = await rootFolder.CreateFolderAsync("HTSave", CreationCollisionOption.OpenIfExists);
-
-                    var saveFile = await saveFolder.CreateFileAsync("saved", CreationCollisionOption.ReplaceExisting);
-
-                    await saveFile.WriteAllTextAsync(JsonConvert.SerializeObject(HobbyListPage.HobbyList));
-                }),
-            };
-            var resolve = new Button()
-            {
-                Text = "resolve",
-                Command = new Command(async () =>
-                {
-                    var rootFolder = FileSystem.Current.LocalStorage;
-                    var saveFolder = await rootFolder.CreateFolderAsync("HTSave", CreationCollisionOption.OpenIfExists);
-
-                    var file = await saveFolder.GetFileAsync("saved");
-                    HobbyList = JsonConvert.DeserializeObject<ObservableCollection<HobbyModel>>(file.ReadAllTextAsync().Result);
-                    HobbyList.Add(null);
-                    HobbyList.Remove(null);
-                }),
-            };
-
             layout.Children.Add(addHobbyButton);
             layout.Children.Add(listView);
-
-            layout.Children.Add(save); 
-            layout.Children.Add(resolve);
-
-            addHobbyButton.Pressed +=
-                (sender, eventArgs) => AddNewHobby();
 
             Content = layout;
         }
@@ -175,6 +140,27 @@ namespace MobileAppProject
 
             if (!result.Equals(cancel))
                 HobbyList.Add(new HobbyModel(result));
+        }
+
+        public override async void SavePageData()
+        {
+            var saveFile = await App.SaveFolder.CreateFileAsync("HobbyListPageSave", CreationCollisionOption.ReplaceExisting);
+
+            await saveFile.WriteAllTextAsync(JsonConvert.SerializeObject(HobbyListPage.HobbyList));
+        }
+
+        public override async void LoadPageData() 
+        {
+            if (App.SaveFolder.CheckExistsAsync("HobbyListPageSave").Result == ExistenceCheckResult.FileExists)
+            {
+                var file = await App.SaveFolder.GetFileAsync("HobbyListPageSave");
+
+                var saveData = JsonConvert.DeserializeObject<ObservableCollection<HobbyModel>>(file.ReadAllTextAsync().Result);
+                foreach (var item in saveData)
+                {
+                    HobbyList.Add(item);
+                }
+            }
         }
     }
 

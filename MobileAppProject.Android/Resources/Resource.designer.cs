@@ -16761,17 +16761,11 @@ namespace MobileAppProject.Droid
 			
 			// aapt resource value: 0x7F03040D
 			public const int updatesContinuously = 2130904077;
-			public const int ttcIndex = 2130904075;
-			
-			// aapt resource value: 0x7F03040D
-			public const int updatesContinuously = 2130904077;
 			
 			// aapt resource value: 0x7F03040C
 			public const int upDuration = 2130904076;
 			
 			// aapt resource value: 0x7F03040E
-			public const int uri = 2130904078;
-			
 			public const int uri = 2130904078;
 			
 			// aapt resource value: 0x7F03040F
@@ -16871,8 +16865,6 @@ namespace MobileAppProject.Droid
 			public const int yearStyle = 2130904110;
 			
 			// aapt resource value: 0x7F03042F
-			public const int yearTodayStyle = 2130904111;
-			
 			public const int yearTodayStyle = 2130904111;
 			
 			static Attribute()

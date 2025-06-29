@@ -1,10 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using Newtonsoft.Json;
+using PCLStorage;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Xamarin.Forms;
 
 namespace MobileAppProject
 {
-    public class NotesPage : ContentPage
+    public class NotesPage : ContentPageExtension
     {
         public static ObservableCollection<NoteItem> Notes = 
             new ObservableCollection<NoteItem>();
@@ -137,6 +139,38 @@ namespace MobileAppProject
             var page = new SingleNotePage(node);
             Navigation.PushAsync(page);
         }
+
+        public override async void SavePageData()
+        {
+            var notesSaveFile = await App.SaveFolder.CreateFileAsync("NotesPageNotesSave", CreationCollisionOption.ReplaceExisting);
+            var goalsSaveFile = await App.SaveFolder.CreateFileAsync("NotesPageGoalsSave", CreationCollisionOption.ReplaceExisting);
+
+            await notesSaveFile.WriteAllTextAsync(JsonConvert.SerializeObject(Notes));
+            await goalsSaveFile.WriteAllTextAsync(JsonConvert.SerializeObject(Goals));
+        }
+
+        public override async void LoadPageData()
+        {
+            if (App.SaveFolder.CheckExistsAsync("NotesPageNotesSave").Result == ExistenceCheckResult.FileExists &&
+                App.SaveFolder.CheckExistsAsync("NotesPageGoalsSave").Result == ExistenceCheckResult.FileExists)
+            {
+                var notesFile = await App.SaveFolder.GetFileAsync("NotesPageNotesSave");
+                var goalsFile = await App.SaveFolder.GetFileAsync("NotesPageGoalsSave");
+
+                var notesData = JsonConvert.DeserializeObject<ObservableCollection<NoteItem>>(notesFile.ReadAllTextAsync().Result);
+                var goalsData = JsonConvert.DeserializeObject<ObservableCollection<string>>(goalsFile.ReadAllTextAsync().Result);
+
+                foreach (var note in notesData)
+                {
+                    Notes.Add(note);
+                }
+
+                foreach (var goal in goalsData)
+                {
+                    Goals.Add(goal);
+                }
+            }
+        }
     }
 
     public class NoteItem
@@ -154,6 +188,7 @@ namespace MobileAppProject
             Id = LastId++;
         }
 
+        [JsonConstructor]
         public NoteItem(int id, string text)
         {
             Id = id;
