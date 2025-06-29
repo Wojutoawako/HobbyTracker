@@ -6,7 +6,6 @@ using Xamarin.Essentials;
 using System.Collections.ObjectModel;
 using PCLStorage;
 using Newtonsoft.Json;
-using Xamarin.Plugin.Calendar.Models;
 using System;
 
 namespace MobileAppProject
@@ -83,6 +82,9 @@ namespace MobileAppProject
                 {
                     var collection = Calendar.Events[activity.ActivityTime] as ObservableCollection<ActivityModel>;
                     collection.RemoveAt(collection.IndexOf(activity));
+
+                    if (collection.Count == 0)
+                        Calendar.Events.Remove(activity.ActivityTime);
                 }),
 
                 Style = Styles.MicroButtonStyle,
